@@ -3,26 +3,48 @@ title: "Blast"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Blast is a common approach used throughout efforts. Here is a notebook to get you started with a test dataset. As part you will be writing to a directory named `big-stuff` this directory is ignored by git.
+
+
+Blast will need to be installed on your local machine. 
+
+## Download stand-alone blast (optional)
+see ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
+```{bash}
+cd /Applications/bioinfo/
+curl -O https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.12.0+-x64-macosx.tar.gz
+tar -xf ncbi-blast-2.12.0+-x64-macosx.tar.gz
+cd -
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Set blast directory
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{bash}
+bldir=/Applications/bioinfo/ncbi-blast-2.12.0+/bin/
+#run blastx help to test 
+${bldir}blastx -h
 ```
 
-## Including Plots
+## Create blast database (protein)
 
-You can also embed plots, for example:
+Check release at https://www.uniprot.org/downloads. For example the release used here is **r2021_04**
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{bash}
+cd ../big-stuff
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2021_04.fasta.gz
+gunzip -k uniprot_sprot_r2021_04.fasta.gz
+cd -
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{bash}
+${bldir}makeblastdb \
+-in ../big-stuff/uniprot_sprot_r2021_04.fasta \
+-dbtype prot \
+-out ../big-stuff/Users/sr320/Documents/wd_bio/blast/uniprot_sprot_r2021_04
+```
+
+
+
