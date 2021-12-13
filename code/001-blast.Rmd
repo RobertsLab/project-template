@@ -66,4 +66,7 @@ ${bldir}blastx \
 -outfmt 6
 ```
 
+```{bash}
+head -3 ../analyses/tutorial/Ab_4-uniprot_blastx.tab
+```
 
